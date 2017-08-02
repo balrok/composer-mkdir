@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<project name="fbourigault/composer-mkdir" basedir="." default="main">
+<project name="balrok/composer-mkdir" basedir="." default="main">
 
     <target name="main" description="">
         <phingCall target="composer" />
         <phingCall target="phpcs" />
         <phingCall target="phpmd" />
-        <phingCall target="phpunit" />
     </target>
 
     <target name="composer">
@@ -24,13 +23,6 @@
     </target>
     <target name="phpmd">
         <exec command="vendor/bin/phpmd ScriptHandler.php,Tests text cleancode,codesize,controversial,design,naming,unusedcode"
-              escape="false"
-              passthru="true"
-              checkreturn="true"
-        />
-    </target>
-    <target name="phpunit">
-        <exec command="vendor/bin/phpunit"
               escape="false"
               passthru="true"
               checkreturn="true"

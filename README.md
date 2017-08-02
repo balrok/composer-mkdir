@@ -1,11 +1,8 @@
 Composer mkdir
 ==============
 
-This tool allows you to create directories when a composer install or update is run.
+This tool allows you to create directories and symlinks when a composer install or update is run.
 
-[![Build Status](https://travis-ci.org/fbourigault/composer-mkdir.svg?branch=master)](https://travis-ci.org/fbourigault/composer-mkdir)
-[![Latest Stable Version](https://poser.pugx.org/fbourigault/composer-mkdir/v/stable.svg)](https://packagist.org/packages/fbourigault/composer-mkdir)
-[![License](https://poser.pugx.org/fbourigault/composer-mkdir/license.svg)](https://packagist.org/packages/fbourigault/composer-mkdir)
 
 Usage
 -----
@@ -13,23 +10,31 @@ Usage
 ```json
 {
     "require": {
-        "fbourigault/composer-mkdir": "^2.0"
+        "balrok/composer-mkdir": "^2.1"
     },
     "scripts": {
         "post-install-cmd": [
-            "Fbourigault\\ComposerMkdir\\ScriptHandler::mkdirs"
+            "Balrok\\ComposerMkdir\\ScriptHandler::mkdirs"
         ],
         "post-update-cmd": [
-            "Fbourigault\\ComposerMkdir\\ScriptHandler::mkdirs"
+            "Balrok\\ComposerMkdir\\ScriptHandler::mkdirs"
         ]
     },
     "extra": {
-        "fbourigault-composer-mkdir": [
-            "var/cache",
-            "var/log"
-        ]
+        "mkdir": {
+            "var/cache": "0777",
+            "runtime": "0777"
+        },
+        "symlink": {
+            "css": "themes/summer/css",
+            "assets/fonts": "../themes/summer/css/fonts"
+        }
     }
 }
 ```
 
-Parent directories are created if required.
+For mkdir: parent directories are created if required.
+
+
+This project builds on top of https://github.com/fbourigault/composer-mkdir - which does not support permissions and symlinks but has unit
+tests.
