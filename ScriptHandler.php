@@ -3,6 +3,7 @@ namespace Balrok\ComposerMkdir;
 
 use Composer\Script\Event;
 use InvalidArgumentException;
+use Exception;
 
 class ScriptHandler
 {
@@ -27,7 +28,8 @@ class ScriptHandler
         }
     }
 
-    public static function mkdir($mkdir) {
+    public static function mkdir($mkdir)
+    {
         if (!is_array($mkdir)) {
             $message = 'The extra.mkdir setting must be an array.';
             throw new InvalidArgumentException($message);
@@ -43,13 +45,16 @@ class ScriptHandler
         $oldmask = umask(0);
         foreach ($mkdir as $directory => $mode) {
             if (!file_exists($directory)) {
-                mkdir($directory, octdec($mode), true);
+                if (!@mkdir($directory, octdec($mode), true)) {
+                    throw new Exception("Error with composer-mkdir:mkdir $directory");
+                }
             }
         }
         umask($oldmask);
     }
 
-    public static function symlink($symlink) {
+    public static function symlink($symlink)
+    {
         if (!is_array($symlink)) {
             $message = 'The extra.symlink setting must be an array.';
             throw new InvalidArgumentException($message);
@@ -57,7 +62,9 @@ class ScriptHandler
 
         foreach ($symlink as $path => $link) {
             if (!file_exists($path)) {
-                symlink($link, $path);
+                if (!@symlink($link, $path)) {
+                    throw new Exception("Error with composer-mkdir:symlink $link -> $path");
+                }
             }
         }
     }
